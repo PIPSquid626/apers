@@ -1,0 +1,307 @@
+/* ===== ac- prefixed auth card: diagonal sweep + blur-fade =====
+   Every class here starts with "ac-", a namespace unlikely to exist
+   anywhere else in the app, so nothing else can collide with or
+   override it. */
+
+.ac-card {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 1.4;
+  margin-inline: auto;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 12px;
+  background: #0aa9b5;
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.35),
+    0 0 40px rgba(0, 190, 220, 0.12);
+}
+
+.ac-panel {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ac-panel-cyan {
+  z-index: 1;
+  background:
+    radial-gradient(circle at 76% 18%, rgba(255, 255, 255, 0.28), transparent 25%),
+    linear-gradient(125deg, #19dede 0%, #10bdc7 45%, #07899a 100%);
+}
+
+.ac-panel-dark {
+  z-index: 2;
+  background: linear-gradient(145deg, #081825 0%, #04111b 55%, #02070d 100%);
+  clip-path: polygon(0 0, 31% 0, 75% 100%, 0 100%);
+  transition: clip-path 1.05s cubic-bezier(0.76, 0, 0.18, 1);
+}
+
+.ac-card.ac-mode-signup .ac-panel-dark {
+  clip-path: polygon(66% 0, 100% 0, 100% 100%, 34% 100%);
+}
+
+/* ---- Shared fade/slide behaviour for every panel of text or a form ---- */
+
+.ac-layer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  opacity: 0;
+  filter: blur(6px);
+  pointer-events: none;
+  transition: opacity 0.45s ease, filter 0.45s ease, transform 0.45s ease;
+}
+
+.ac-layer.ac-active {
+  opacity: 1;
+  filter: blur(0);
+  pointer-events: auto;
+  transform: translateX(0) !important;
+}
+
+/* ---- Promo copy (teal side) ---- */
+
+.ac-promo {
+  width: 44%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 6%;
+  z-index: 3;
+}
+
+.ac-promo-signin {
+  right: 4%;
+  transform: translateX(18px);
+}
+
+.ac-promo-signup {
+  left: 4%;
+  transform: translateX(-18px);
+}
+
+.ac-promo-title {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(1.05rem, 2.6vw, 1.5rem);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.ac-promo-text {
+  max-width: 220px;
+  margin: 12px 0 18px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(0.7rem, 1.5vw, 0.82rem);
+  line-height: 1.5;
+}
+
+.ac-promo-btn {
+  pointer-events: auto;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  padding: 9px 26px;
+  background: transparent;
+  color: #fff;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.ac-promo-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* ---- Form zones (dark side) ---- */
+
+.ac-form-zone {
+  width: 45%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+
+.ac-zone-signin {
+  left: 2%;
+}
+
+.ac-zone-signup {
+  right: 2%;
+}
+
+.ac-zone-signin.ac-layer {
+  transform: translateX(-18px);
+}
+
+.ac-zone-signup.ac-layer {
+  transform: translateX(18px);
+}
+
+.ac-form {
+  width: min(84%, 230px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.ac-form-title {
+  margin: 0 0 16px;
+  color: #f4fbff;
+  font-size: clamp(0.95rem, 2.1vw, 1.25rem);
+  font-weight: 700;
+  text-align: center;
+}
+
+.ac-role-toggle {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 14px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.ac-role-btn {
+  flex: 1 1 0%;
+  width: 0;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 6px 4px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(230, 246, 250, 0.75);
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.ac-role-btn.ac-active {
+  background: linear-gradient(180deg, #36fbf4 0%, #0aa1b0 100%);
+  color: #03222b;
+}
+
+.ac-input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+  padding: 11px 13px;
+  border: none;
+  border-radius: 8px;
+  background: #eef6f8;
+  color: #0b1a24;
+  font-size: 0.85rem;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.ac-input::placeholder {
+  color: #7c8a90;
+}
+
+.ac-input:focus {
+  box-shadow: 0 0 0 2px #19e8ec;
+}
+
+.ac-link-small {
+  display: inline-block;
+  margin: -2px 0 14px;
+  color: #a9eef2;
+  font-size: 0.72rem;
+  text-decoration: underline;
+}
+
+.ac-link-small:hover {
+  color: #66fbff;
+}
+
+.ac-error {
+  margin: -2px 0 12px;
+  color: #ff97a2;
+  font-size: 0.74rem;
+}
+
+.ac-submit-btn {
+  width: 100%;
+  margin-top: 4px;
+  padding: 11px 0;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #03222b;
+  background: linear-gradient(180deg, #36fbf4 0%, #12cfda 45%, #0795aa 100%);
+  box-shadow:
+    inset 0 1px rgba(255, 255, 255, 0.55),
+    0 8px 22px rgba(0, 238, 255, 0.22);
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.ac-submit-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.ac-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ===== Small screens: scale down, keep the same split layout ===== */
+
+@media (max-width: 640px) {
+  .ac-card {
+    aspect-ratio: 0.98;
+    border-radius: 10px;
+  }
+
+  .ac-promo,
+  .ac-form-zone {
+    width: 92%;
+    left: 4% !important;
+    right: 4% !important;
+    top: 0;
+    bottom: 0;
+  }
+
+  .ac-panel-dark {
+    clip-path: polygon(0 0, 0 34%, 100% 62%, 100% 100%, 0 100%);
+  }
+
+  .ac-card.ac-mode-signup .ac-panel-dark {
+    clip-path: polygon(0 0, 100% 0, 100% 38%, 0 66%);
+  }
+
+  .ac-promo-signin,
+  .ac-promo-signup,
+  .ac-zone-signin.ac-layer,
+  .ac-zone-signup.ac-layer {
+    transform: none;
+  }
+
+  .ac-promo {
+    justify-content: flex-start;
+    padding-top: 8%;
+  }
+
+  .ac-form-zone {
+    justify-content: flex-end;
+    padding-bottom: 6%;
+  }
+}

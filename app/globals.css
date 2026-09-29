@@ -1,0 +1,405 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Theme variables: dark (navy/teal) + light (white/neon blue) =====
+   Paste this block into app/globals.css, ABOVE the [data-theme="light"]
+   block that already exists for the admin panel's --admin-* variables.
+   These are separate variable names (--brand-*) so they won't collide
+   with your existing --admin-* tokens. */
+
+:root,
+:root[data-theme="dark"] {
+  --brand-navy: #0a1420;
+  --brand-navy-light: #0f1c2c;
+  --brand-navy-soft: #16283b;
+  --brand-border: #1e3a52;
+  --brand-teal: #0ef2e0;
+  --brand-text: #eafcff;
+  --brand-muted: #b7c5d3;
+}
+
+:root[data-theme="light"] {
+  --brand-navy: #f4f9ff;
+  --brand-navy-light: #ffffff;
+  --brand-navy-soft: #e6f2ff;
+  --brand-border: #cfe0f5;
+  --brand-teal: #0074ff;
+  --brand-text: #0b1a24;
+  --brand-muted: #5a7185;
+}
+
+/* Smooth crossfade when the toggle is clicked, instead of an instant snap */
+body,
+[class*="bg-brand-"],
+[class*="text-brand-"],
+[class*="border-brand-"] {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* ===================================================================
+   ADMIN DASHBOARD THEME VARIABLES — toggled by data-theme on the
+   dashboard's outer wrapper. Dark values match the login page exactly;
+   light values reuse the ink/paper/hairline tokens already in
+   tailwind.config.ts.
+   =================================================================== */
+[data-theme="dark"] {
+  --admin-bg: #0a1420;
+  --admin-surface: #0f1c2c;
+  --admin-surface-soft: #16283b;
+  --admin-border: #1e3a52;
+  --admin-text: #eafcff;
+  --admin-muted: #b7c5d3;
+  --admin-accent: #0ef2e0;
+  --admin-accent-contrast: #04121a;
+  --admin-grid: #1e3a52;
+}
+
+[data-theme="light"] {
+  --admin-bg: #F7F7F5;
+  --admin-surface: #ffffff;
+  --admin-surface-soft: #F0F0ED;
+  --admin-border: #DADAD5;
+  --admin-text: #14213D;
+  --admin-muted: #5b6472;
+  --admin-accent: #0aa89c;
+  --admin-accent-contrast: #ffffff;
+  --admin-grid: #DADAD5;
+}
+
+.category-badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+.category-excellent { @apply bg-excellent/10 text-excellent; }
+.category-good { @apply bg-good/10 text-good; }
+.category-average { @apply bg-average/10 text-average; }
+.category-poor { @apply bg-poor/10 text-poor; }
+
+/* ===================================================================
+   AUTH PAGE — neon teal sliding sign-in / sign-up panel
+   =================================================================== */
+
+.auth-wrapper {
+  position: relative;
+  width: 850px;
+  max-width: 100%;
+  min-height: 520px;
+  background: #0a1420;
+  border-radius: 20px;
+  box-shadow: 0 0 45px rgba(0, 238, 255, 0.25), 0 25px 60px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+  left: 0;
+  z-index: 2;
+}
+
+.sign-up-container {
+  left: 0;
+  opacity: 0;
+  z-index: 1;
+}
+
+.auth-wrapper.right-panel-active .sign-in-container {
+  transform: translateX(100%);
+}
+
+.auth-wrapper.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: authShow 0.6s;
+}
+
+@keyframes authShow {
+  0%, 49.99% { opacity: 0; z-index: 1; }
+  50%, 100% { opacity: 1; z-index: 5; }
+}
+
+.auth-form {
+  background: #0f1c2c;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 50px;
+}
+
+.auth-form-plain {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auth-title {
+  color: #eafcff;
+  font-family: 'Source Serif 4', serif;
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.auth-text {
+  color: #b7c5d3;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.role-toggle {
+  display: flex;
+  border: 1px solid #0ef2e0;
+  border-radius: 999px;
+  overflow: hidden;
+  width: fit-content;
+  margin-bottom: 6px;
+}
+
+.role-btn {
+  padding: 6px 18px;
+  font-size: 13px;
+  background: transparent;
+  color: #0ef2e0;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.role-btn.active {
+  background: #0ef2e0;
+  color: #04121a;
+  font-weight: 600;
+}
+
+.auth-input {
+  background: #16283b;
+  border: 1px solid #1e3a52;
+  color: #eafcff;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-input::placeholder {
+  color: #6f8ba3;
+}
+
+.auth-input:focus {
+  border-color: #0ef2e0;
+  box-shadow: 0 0 0 3px rgba(14, 242, 224, 0.15);
+}
+
+.auth-btn {
+  background: linear-gradient(135deg, #0ef2e0, #06283d);
+  color: #04121a;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 0 20px rgba(14, 242, 224, 0.35);
+}
+
+.auth-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 28px rgba(14, 242, 224, 0.55);
+}
+
+.auth-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-error {
+  color: #ff8080;
+  font-size: 13px;
+  margin: 0;
+}
+
+.auth-link-small {
+  color: #0ef2e0;
+  font-size: 13px;
+  text-decoration: none;
+  align-self: flex-start;
+}
+
+.auth-link-small:hover {
+  text-decoration: underline;
+}
+
+.auth-switch {
+  color: #b7c5d3;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.auth-switch-link {
+  background: none;
+  border: none;
+  color: #0ef2e0;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.auth-wrapper.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+/* NOTE: no clip-path here anymore — it was cutting off the panel text
+   and making the slide animation look like it was spinning. The
+   diagonal look now comes purely from the gradient direction (135deg),
+   which is safe to animate. */
+.overlay {
+  background: linear-gradient(135deg, #052b36 0%, #0ef2e0 100%);
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.auth-wrapper.right-panel-active .overlay {
+  transform: translateX(50%);
+}
+
+.overlay-panel {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  padding: 0 40px;
+  transition: transform 0.6s ease-in-out;
+  color: #04121a;
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+.auth-wrapper.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+
+.overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+.auth-wrapper.right-panel-active .overlay-right {
+  transform: translateX(20%);
+}
+
+.overlay-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.overlay-text {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.ghost-btn {
+  background: transparent;
+  border: 2px solid #04121a;
+  color: #04121a;
+  border-radius: 999px;
+  padding: 10px 26px;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.reset-card {
+  background: #0f1c2c;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 0 45px rgba(0, 238, 255, 0.2), 0 25px 60px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .auth-wrapper {
+    min-height: 0;
+    height: auto;
+  }
+
+  .overlay-container {
+    display: none;
+  }
+
+  .form-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    display: none;
+  }
+
+  .sign-in-container {
+    display: block;
+  }
+
+  .auth-wrapper.right-panel-active .sign-in-container {
+    display: none;
+  }
+
+  .auth-wrapper.right-panel-active .sign-up-container {
+    display: block;
+  }
+
+  .auth-form {
+    padding: 40px 24px;
+  }
+
+  .mobile-only {
+    display: block;
+    text-align: center;
+  }
+}
